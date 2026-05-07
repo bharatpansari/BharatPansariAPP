@@ -21,7 +21,7 @@ export default function ProductCard({ product, onPress }: ProductCardProps) {
   return (
     <TouchableOpacity testID={`product-card-${product.id}`} style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: product.images[0]?.src }} style={styles.image} />
+        <Image source={{ uri: product.images[0]?.src }} style={styles.image} resizeMode="cover" />
         {hasDiscount && (
           <View style={styles.saleBadge}>
             <Text style={styles.saleBadgeText}>SALE</Text>
@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
   },
   saleBadge: {
     position: 'absolute',

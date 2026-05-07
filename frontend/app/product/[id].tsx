@@ -59,7 +59,7 @@ export default function ProductDetailScreen() {
         <View style={styles.imageGallery}>
           <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
             {product.images.map((img) => (
-              <Image key={img.id} source={{ uri: img.src }} style={styles.productImage} />
+              <Image key={img.id} source={{ uri: img.src }} style={styles.productImage} resizeMode="cover" />
             ))}
           </ScrollView>
           {hasDiscount && (
@@ -193,7 +193,6 @@ const styles = StyleSheet.create({
   productImage: {
     width: SCREEN_WIDTH,
     height: SCREEN_WIDTH * 0.8,
-    resizeMode: 'cover',
   },
   discountBadge: {
     position: 'absolute',

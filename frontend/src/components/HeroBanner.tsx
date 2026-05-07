@@ -32,7 +32,7 @@ export default function HeroBanner({ banners }: HeroBannerProps) {
       >
         {banners.map((banner) => (
           <View key={banner.id} style={styles.bannerCard}>
-            <Image source={{ uri: banner.image }} style={styles.bannerImage} />
+            <Image source={{ uri: banner.image }} style={styles.bannerImage} resizeMode="cover" />
             <View style={styles.overlay}>
               <Text style={styles.title}>{banner.title}</Text>
               <Text style={styles.subtitle}>{banner.subtitle}</Text>
@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
   bannerImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
   },
   overlay: {
     position: 'absolute',

@@ -22,7 +22,7 @@ export default function CategoryCard({ category, onPress, variant = 'grid' }: Ca
   return (
     <TouchableOpacity testID={`category-card-${category.slug}`} style={styles.gridCard} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.gridImageContainer}>
-        <Image source={{ uri: category.image }} style={styles.gridImage} />
+        <Image source={{ uri: category.image }} style={styles.gridImage} resizeMode="cover" />
       </View>
       <Text style={styles.gridName} numberOfLines={2}>{category.name}</Text>
       <Text style={styles.gridCount}>{category.count} products</Text>
@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
   gridImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
   },
   gridName: {
     fontSize: 12,

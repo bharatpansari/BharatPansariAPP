@@ -52,24 +52,26 @@ export default function OnboardingScreen() {
         <Text style={styles.skipText}>Skip</Text>
       </TouchableOpacity>
 
-      <ScrollView
-        ref={scrollRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-      >
-        {slides.map((slide, index) => (
-          <View key={index} style={[styles.slide, { width: SCREEN_WIDTH }]}>
-            <View style={styles.iconCircle}>
-              <Ionicons name={slide.icon} size={56} color={Colors.primary} />
+      <View style={styles.slidesContainer}>
+        <ScrollView
+          ref={scrollRef}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+        >
+          {slides.map((slide, index) => (
+            <View key={index} style={[styles.slide, { width: SCREEN_WIDTH }]}>
+              <View style={styles.iconCircle}>
+                <Ionicons name={slide.icon} size={56} color={Colors.primary} />
+              </View>
+              <Text style={styles.title}>{slide.title}</Text>
+              <Text style={styles.description}>{slide.description}</Text>
             </View>
-            <Text style={styles.title}>{slide.title}</Text>
-            <Text style={styles.description}>{slide.description}</Text>
-          </View>
-        ))}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      </View>
 
       <View style={styles.footer}>
         <View style={styles.dots}>
@@ -103,6 +105,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.textSecondary,
     fontWeight: '500',
+  },
+  slidesContainer: {
+    flex: 1,
   },
   slide: {
     flex: 1,
