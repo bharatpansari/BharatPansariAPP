@@ -1,0 +1,151 @@
+{
+  "theme_and_archetype": {
+    "domain": "Health, Wellness, Ayurveda, Organic Grocery",
+    "theme": "Light Theme",
+    "archetype": "Archetype 1 (Organic & Earthy)",
+    "description": "Grounded, natural, matte, premium, and trustworthy. Tailored for an Indian ecommerce user base, focusing on warmth and cleanliness."
+  },
+  "color_palette": {
+    "backgrounds": {
+      "app": "#F9F8F3",
+      "card": "#FFFFFF",
+      "section_alt": "#F3F1E7"
+    },
+    "primary": {
+      "DEFAULT": "#2D5016",
+      "hover": "#223C11",
+      "light": "#EAF1E6"
+    },
+    "secondary_accent": {
+      "DEFAULT": "#E07A5F",
+      "hover": "#C8644A",
+      "light": "#FDF2EF"
+    },
+    "text": {
+      "primary": "#1C201A",
+      "secondary": "#586253",
+      "disabled": "#A1ADA0",
+      "inverse": "#FFFFFF"
+    },
+    "status": {
+      "success": "#3A7D44",
+      "error": "#D32F2F",
+      "warning": "#F59E0B"
+    },
+    "border": {
+      "DEFAULT": "#E5E7EB",
+      "light": "#F3F4F6",
+      "active": "#2D5016"
+    }
+  },
+  "typography": {
+    "font_families": {
+      "heading": "Outfit, sans-serif",
+      "body": "Manrope, sans-serif"
+    },
+    "scales": {
+      "h1": "text-4xl tracking-tight leading-none font-bold",
+      "h2": "text-2xl tracking-tight leading-tight font-semibold",
+      "h3": "text-xl tracking-tight leading-snug font-medium",
+      "body_lg": "text-base leading-relaxed",
+      "body_md": "text-sm leading-relaxed",
+      "body_sm": "text-xs leading-normal",
+      "overline": "text-[10px] uppercase tracking-[0.15em] font-semibold"
+    },
+    "rules": {
+      "anti_default": "Never use Inter, Roboto, or standard defaults for headings.",
+      "contrast": "Ensure text contrast meets APCA minimums (4.5:1 for body).",
+      "labels": "Use overline style for category tags and badges."
+    }
+  },
+  "spacing_and_layout": {
+    "philosophy": "Mobile-first, generous touch targets, breathable negative space. Use Tailwind padding scale.",
+    "container": "px-4 md:px-6 w-full max-w-md mx-auto relative min-h-screen pb-20 (to accommodate bottom tab)",
+    "grids": {
+      "product_grid": "grid grid-cols-2 gap-4",
+      "category_grid": "grid grid-cols-4 gap-3",
+      "list_layout": "flex flex-col gap-4"
+    },
+    "radius": {
+      "card": "rounded-2xl",
+      "button": "rounded-full",
+      "image": "rounded-xl",
+      "chip": "rounded-full"
+    }
+  },
+  "surface_styles": {
+    "headers": "backdrop-blur-xl bg-white/80 sticky top-0 z-50 border-b border-border/40",
+    "bottom_nav": "backdrop-blur-xl bg-white/90 fixed bottom-0 w-full max-w-md border-t border-border/40 pb-safe z-50",
+    "product_cards": "bg-white border border-black/5 rounded-2xl shadow-sm overflow-hidden",
+    "glassmorphism_tags": "backdrop-blur-md bg-white/60 border border-white/40 shadow-sm"
+  },
+  "motion_and_interactions": {
+    "hover": "transition-transform duration-200 ease-out hover:-translate-y-1 hover:shadow-md",
+    "active": "active:scale-95 transition-transform",
+    "page_transition": "animate-in fade-in slide-in-from-bottom-2 duration-300"
+  },
+  "icons": {
+    "library": "lucide-react",
+    "stroke_width": 1.5,
+    "size": {
+      "nav": "w-6 h-6",
+      "inline": "w-4 h-4"
+    }
+  },
+  "component_instructions": {
+    "global": "This is a mobile web app. Limit max-width to mobile sizes (max-w-md mx-auto) to mimic a native app experience on desktop browsers. Include bottom tab navigation across main screens.",
+    "Splash": "Solid primary green background (#2D5016). Large 'Bharat Pansari' wordmark in white Outfit font. Subtle leaf/sprout icon.",
+    "Onboarding": "Swipeable carousel. Large earthy illustrations/images, h2 headings, and clear 'Next' / 'Get Started' rounded-full primary buttons.",
+    "Home": {
+      "search_bar": "Sticky top bar, pill-shaped input, soft shadow.",
+      "hero_carousel": "Horizontal scroll, generous padding, rounded-2xl images with gradient overlays and text.",
+      "category_chips": "Horizontal flex, hide scrollbar, pill-shaped with icon + text.",
+      "product_sections": "Sections for Featured, New Arrivals, Popular. 2-column grid or horizontal overflow list. Bold Section headers."
+    },
+    "Categories": "Grid layout (2 or 3 columns). Square cards with subtle background (section_alt), centered image, text below.",
+    "ProductListing": "Sort/Filter sticky bar below header. 2-column grid. Product cards include image, brand, name, price, strike-through MRP, stock indicator, star rating, and a circular '+' Add to Cart button at bottom right.",
+    "ProductDetail": "Immersive image gallery (aspect-square, max-h-[50vh]). Title, Price, Rating. 'Ingredients' and 'Description' in collapsible accordions (Shadcn). Fixed bottom bar for 'Add to Cart' & 'Wishlist' buttons.",
+    "Cart": "List of items with quantity selectors (-/1/+). Coupon input with 'Apply' button. Fixed bottom section with total breakdown (Subtotal, Tax, Total) and large Checkout button.",
+    "Account": "List group for navigation (Orders, Addresses, Settings, Privacy). Guest state shows Login/Register prompt. Use Shadcn Avatar.",
+    "BottomNav": "Fixed bottom. 6 tabs (Home, Categories, Search, Wishlist, Cart, Account). Since 6 is dense, ensure icons are balanced and text is text-[10px] tracking-tight. Active tab uses primary green, inactive uses text-secondary."
+  },
+  "media_urls": {
+    "hero_banners": [
+      {
+        "url": "https://images.unsplash.com/photo-1573505097552-7b205ec14e32?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHxheXVydmVkaWMlMjBoZXJicyUyMG1vcnRhciUyMHBlc3RsZXxlbnwwfHx8fDE3NzgxNDI1NTR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Brown wooden mortar - Hero image for Ayurveda section"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1635774855717-0aec182f92cc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHw0fHxoZWFsdGh5JTIwb3JnYW5pYyUyMGdyb2NlcnklMjBiYXNrZXR8ZW58MHx8fHwxNzc4MTQyNTgwfDA&ixlib=rb-4.1.0&q=85",
+        "description": "Vegetable basket - Hero image for Grocery section"
+      }
+    ],
+    "products_and_categories": [
+      {
+        "url": "https://images.unsplash.com/photo-1509358740172-f77c168f6312?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBzcGljZXMlMjBvcmdhbmljJTIwbmF0dXJhbHxlbnwwfHx8fDE3NzgxNDI1NTR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Spoon of peppers - Spices Category / Product"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1777483997189-9d934b0f177d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjBzcGljZXMlMjBvcmdhbmljJTIwbmF0dXJhbHxlbnwwfHx8fDE3NzgxNDI1NTR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Black peppercorns in bowl - Spices Product"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1760108273055-e9bb6e7f3a0c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwzfHxoZWFsdGh5JTIwb3JnYW5pYyUyMGdyb2NlcnklMjBiYXNrZXR8ZW58MHx8fHwxNzc4MTQyNTgwfDA&ixlib=rb-4.1.0&q=85",
+        "description": "Fresh apples/tangerines - Fruits Category / Product"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1492552296703-4ec0a2fb3715?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwyfHxheXVydmVkaWMlMjBoZXJicyUyMG1vcnRhciUyMHBlc3RsZXxlbnwwfHx8fDE3NzgxNDI1NTR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Ceramic mortar pestle - Wellness Product"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Build the application as a mobile-first responsive web app (max-w-md mx-auto) wrapping standard React + Tailwind + Shadcn.",
+    "Implement bottom tab navigation utilizing React Router to switch between Home, Categories, Search, Wishlist, Cart, Account.",
+    "Ensure all interactive elements have data-testid attributes (e.g., data-testid='add-to-cart-btn').",
+    "Use pure HTML/Tailwind for custom layouts like product grids and hero carousels; use heavily customized Shadcn for forms, accordions, tabs, and modals.",
+    "Do NOT use generic placeholders (like via.placeholder.com). Use the URLs provided in media_urls.",
+    "Apply the font families 'Outfit' (headings) and 'Manrope' (body) globally via CSS imports.",
+    "Stick rigidly to the defined color palette: #2D5016 as the primary functional color. Limit its use strictly to CTAs and active states."
+  ]
+}
