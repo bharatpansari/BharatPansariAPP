@@ -3,12 +3,19 @@ import { ApiResponse, HomePageData, Product, Category } from '../models/types';
 import { mockHomeData, mockProducts, mockCategories } from '../constants/mockData';
 
 class ApiClient {
-  private baseUrl: string;
+  private directUrl: string;
+  private proxyUrl: string;
   private useMock: boolean;
 
   constructor() {
-    this.baseUrl = Config.API_BASE_URL + Config.WP_API_NAMESPACE;
+    this.directUrl = Config.API_BASE_URL + Config.WP_API_NAMESPACE;
+    this.proxyUrl = Config.PROXY_BASE_URL + Config.PROXY_PREFIX;
     this.useMock = Config.USE_MOCK;
+  }
+
+  private get baseUrl(): string {
+    // Use proxy to bypass CORS (backend forwards to WordPress)
+    return this.proxyUrl;
   }
 
   private sanitizeProduct(p: any): Product {
@@ -51,8 +58,9 @@ class ApiClient {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      const url = `${this.baseUrl}${endpoint}`;
+      const response = await fetch(url, {
+        headers: { 'Accept': 'application/json' },
         signal: controller.signal,
         ...options,
       });

@@ -6,17 +6,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../src/constants/colors';
 import { Product } from '../../src/models/types';
 import { apiClient } from '../../src/services/api';
-import ProductCard from '../../src/components/ProductCard';
-import { LoadingState, EmptyState } from '../../src/components/States';
-import { mockCategories } from '../../src/constants/mockData';
 
 export default function CategoryProductsScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const category = mockCategories.find(c => c.slug === slug);
+  const [categoryName, setCategoryName] = useState('');
 
   useEffect(() => {
     loadProducts();
@@ -24,6 +20,7 @@ export default function CategoryProductsScreen() {
 
   const loadProducts = async () => {
     if (!slug) return;
+    setCategoryName(typeof slug === 'string' ? slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Products');
     const response = await apiClient.getProducts(slug);
     if (response.success && response.data) {
       setProducts(response.data);
@@ -39,7 +36,7 @@ export default function CategoryProductsScreen() {
           <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
         </TouchableOpacity>
         <View style={styles.headerInfo}>
-          <Text style={styles.headerTitle}>{category?.name || 'Products'}</Text>
+          <Text style={styles.headerTitle}>{categoryName || 'Products'}</Text>
           <Text style={styles.headerCount}>{products.length} products</Text>
         </View>
         <View style={styles.headerActions}>

@@ -48,6 +48,14 @@ Production-ready mobile ecommerce app for Bharat Pansari - a natural, herbal, Ay
 - API base URL configurable via environment
 - All mock data local (no direct WordPress DB connection)
 
+## Phase 1A - Real API Integration (May 2026)
+- Switched from mock data to real WordPress REST API via backend proxy
+- Backend proxy at `/api/wp/*` forwards to `https://bharatpansari.com/wp-json/bp-app/v1/*`
+- All product/category/search data now comes from live WooCommerce
+- Safe handling for empty prices, missing images, empty descriptions
+- Login/register remain mock for Phase 1A
+- Cart/wishlist remain client-side Zustand
+
 ## Phase 2 Roadmap
 - Connect real WordPress REST API
 - Implement JWT authentication
