@@ -75,53 +75,59 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
 
-        {/* Featured Products */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Featured Products</Text>
+        {/* Featured Products - only show if non-empty */}
+        {homeData.featured_products.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Featured Products</Text>
+            </View>
+            <View style={styles.productGrid}>
+              {homeData.featured_products.slice(0, 4).map(product => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onPress={() => router.push(`/product/${product.id}`)}
+                />
+              ))}
+            </View>
           </View>
-          <View style={styles.productGrid}>
-            {homeData.featured_products.slice(0, 4).map(product => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onPress={() => router.push(`/product/${product.id}`)}
-              />
-            ))}
-          </View>
-        </View>
+        )}
 
         {/* New Arrivals */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>New Arrivals</Text>
+        {homeData.new_arrivals.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>New Arrivals</Text>
+            </View>
+            <View style={styles.productGrid}>
+              {homeData.new_arrivals.slice(0, 4).map(product => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onPress={() => router.push(`/product/${product.id}`)}
+                />
+              ))}
+            </View>
           </View>
-          <View style={styles.productGrid}>
-            {homeData.new_arrivals.slice(0, 4).map(product => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onPress={() => router.push(`/product/${product.id}`)}
-              />
-            ))}
-          </View>
-        </View>
+        )}
 
         {/* Popular Products */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Popular Products</Text>
+        {homeData.popular_products.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Popular Products</Text>
+            </View>
+            <View style={styles.productGrid}>
+              {homeData.popular_products.slice(0, 4).map(product => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onPress={() => router.push(`/product/${product.id}`)}
+                />
+              ))}
+            </View>
           </View>
-          <View style={styles.productGrid}>
-            {homeData.popular_products.slice(0, 4).map(product => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onPress={() => router.push(`/product/${product.id}`)}
-              />
-            ))}
-          </View>
-        </View>
+        )}
 
         {/* Disclaimer */}
         <View style={styles.disclaimer}>

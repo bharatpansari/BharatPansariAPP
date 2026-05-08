@@ -36,11 +36,30 @@ export default function ProductDetailScreen() {
   };
 
   if (loading) return <LoadingState />;
-  if (!product) return null;
+  if (!product) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.header}>
+          <TouchableOpacity testID="back-btn" style={styles.headerBtn} onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
+          </TouchableOpacity>
+          <View />
+        </View>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 40 }}>
+          <Ionicons name="alert-circle-outline" size={48} color={Colors.textDisabled} />
+          <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.textPrimary, marginTop: 12 }}>Product not found</Text>
+          <Text style={{ fontSize: 13, color: Colors.textSecondary, marginTop: 4 }}>This product may no longer be available</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   const inWishlist = isInWishlist(product.id);
-  const hasDiscount = product.sale_price && product.sale_price !== product.regular_price;
+  const hasPrice = product.price !== '' && product.price !== '0';
+  const hasDiscount = hasPrice && product.sale_price && product.sale_price !== '' && product.sale_price !== product.regular_price;
   const discount = hasDiscount ? Math.round(((parseFloat(product.regular_price) - parseFloat(product.sale_price)) / parseFloat(product.regular_price)) * 100) : 0;
+  const imgSrc = product.images?.[0]?.src;
+  const hasImage = imgSrc && imgSrc !== '';
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -57,11 +76,18 @@ export default function ProductDetailScreen() {
 
         {/* Image Gallery */}
         <View style={styles.imageGallery}>
-          <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
-            {product.images.map((img) => (
-              <Image key={img.id} source={{ uri: img.src }} style={styles.productImage} resizeMode="cover" />
-            ))}
-          </ScrollView>
+          {hasImage ? (
+            <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
+              {product.images.filter(img => img.src && img.src !== '').map((img) => (
+                <Image key={img.id} source={{ uri: img.src }} style={styles.productImage} resizeMode="cover" />
+              ))}
+            </ScrollView>
+          ) : (
+            <View style={[styles.productImage, { alignItems: 'center', justifyContent: 'center' }]}>
+              <Ionicons name="image-outline" size={64} color={Colors.textDisabled} />
+              <Text style={{ color: Colors.textDisabled, marginTop: 8 }}>No image available</Text>
+            </View>
+          )}
           {hasDiscount && (
             <View style={styles.discountBadge}>
               <Text style={styles.discountText}>{discount}% OFF</Text>
@@ -73,14 +99,21 @@ export default function ProductDetailScreen() {
         <View style={styles.infoSection}>
           <Text style={styles.productName}>{product.name}</Text>
           <View style={styles.priceRow}>
-            <Text style={styles.price}>{Config.CURRENCY_SYMBOL}{product.price}</Text>
-            {hasDiscount && (
-              <Text style={styles.oldPrice}>{Config.CURRENCY_SYMBOL}{product.regular_price}</Text>
+            {hasPrice ? (
+              <>
+                <Text style={styles.price}>{Config.CURRENCY_SYMBOL}{product.price}</Text>
+                {hasDiscount && (
+                  <Text style={styles.oldPrice}>{Config.CURRENCY_SYMBOL}{product.regular_price}</Text>
+                )}
+              </>
+            ) : (
+              <Text style={styles.oldPrice}>Price not available</Text>
             )}
           </View>
 
-          {/* Rating */}
-          <View style={styles.ratingRow}>
+          {/* Rating - only if > 0 */}
+          {parseFloat(product.average_rating) > 0 && (
+            <View style={styles.ratingRow}>
             <View style={styles.stars}>
               {[1, 2, 3, 4, 5].map(s => (
                 <Ionicons key={s} name={s <= Math.round(parseFloat(product.average_rating)) ? 'star' : 'star-outline'} size={16} color={Colors.warning} />
@@ -88,6 +121,7 @@ export default function ProductDetailScreen() {
             </View>
             <Text style={styles.ratingText}>{product.average_rating} ({product.rating_count} reviews)</Text>
           </View>
+          )}
 
           {/* Stock */}
           <View style={styles.stockRow}>
@@ -95,8 +129,10 @@ export default function ProductDetailScreen() {
             <Text style={styles.stockText}>{product.stock_status === 'instock' ? 'In Stock' : 'Out of Stock'}</Text>
           </View>
 
-          {/* Short Description */}
-          <Text style={styles.shortDesc}>{product.short_description}</Text>
+          {/* Short Description - only if non-empty */}
+          {product.short_description ? (
+            <Text style={styles.shortDesc}>{product.short_description}</Text>
+          ) : null}
         </View>
 
         {/* Quantity Selector */}
@@ -113,11 +149,13 @@ export default function ProductDetailScreen() {
           </View>
         </View>
 
-        {/* Description */}
-        <View style={styles.descriptionSection}>
-          <Text style={styles.sectionLabel}>Product Details</Text>
-          <Text style={styles.descText}>{product.description}</Text>
-        </View>
+        {/* Description - only if non-empty */}
+        {product.description ? (
+          <View style={styles.descriptionSection}>
+            <Text style={styles.sectionLabel}>Product Details</Text>
+            <Text style={styles.descText}>{product.description}</Text>
+          </View>
+        ) : null}
 
         {/* Attributes */}
         {product.attributes.length > 0 && (
@@ -152,14 +190,20 @@ export default function ProductDetailScreen() {
         >
           <Ionicons name={inWishlist ? 'heart' : 'heart-outline'} size={22} color={inWishlist ? Colors.accent : Colors.textPrimary} />
         </TouchableOpacity>
-        <TouchableOpacity
-          testID="add-to-cart-detail-btn"
-          style={styles.addToCartBtn}
-          onPress={() => { addToCart(product, quantity); }}
-        >
-          <Ionicons name="bag-add" size={20} color={Colors.textInverse} />
-          <Text style={styles.addToCartText}>Add to Cart</Text>
-        </TouchableOpacity>
+        {hasPrice ? (
+          <TouchableOpacity
+            testID="add-to-cart-detail-btn"
+            style={styles.addToCartBtn}
+            onPress={() => { addToCart(product, quantity); }}
+          >
+            <Ionicons name="bag-add" size={20} color={Colors.textInverse} />
+            <Text style={styles.addToCartText}>Add to Cart</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={[styles.addToCartBtn, { backgroundColor: Colors.textDisabled }]}>
+            <Text style={styles.addToCartText}>Price Not Available</Text>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );

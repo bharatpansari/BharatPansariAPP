@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../constants/colors';
-import { Product } from '../models/types';
 import { Config } from '../constants/config';
+import { Product } from '../models/types';
 import { useCartStore } from '../stores/useCartStore';
 import { useWishlistStore } from '../stores/useWishlistStore';
 
@@ -16,12 +16,22 @@ export default function ProductCard({ product, onPress }: ProductCardProps) {
   const addToCart = useCartStore(s => s.addToCart);
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlistStore();
   const inWishlist = isInWishlist(product.id);
-  const hasDiscount = product.sale_price && product.sale_price !== product.regular_price;
+
+  const hasPrice = product.price !== '' && product.price !== '0';
+  const hasDiscount = hasPrice && product.sale_price && product.sale_price !== '' && product.sale_price !== product.regular_price;
+  const imgSrc = product.images?.[0]?.src;
+  const hasImage = imgSrc && imgSrc !== '';
 
   return (
     <TouchableOpacity testID={`product-card-${product.id}`} style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: product.images[0]?.src }} style={styles.image} resizeMode="cover" />
+        {hasImage ? (
+          <Image source={{ uri: imgSrc }} style={styles.image} resizeMode="cover" />
+        ) : (
+          <View style={styles.placeholderImage}>
+            <Ionicons name="image-outline" size={32} color={Colors.textDisabled} />
+          </View>
+        )}
         {hasDiscount && (
           <View style={styles.saleBadge}>
             <Text style={styles.saleBadgeText}>SALE</Text>
@@ -38,23 +48,33 @@ export default function ProductCard({ product, onPress }: ProductCardProps) {
       <View style={styles.info}>
         <Text style={styles.name} numberOfLines={2}>{product.name}</Text>
         <View style={styles.priceRow}>
-          <Text style={styles.price}>{Config.CURRENCY_SYMBOL}{product.price}</Text>
-          {hasDiscount && (
-            <Text style={styles.regularPrice}>{Config.CURRENCY_SYMBOL}{product.regular_price}</Text>
+          {hasPrice ? (
+            <>
+              <Text style={styles.price}>{Config.CURRENCY_SYMBOL}{product.price}</Text>
+              {hasDiscount && (
+                <Text style={styles.regularPrice}>{Config.CURRENCY_SYMBOL}{product.regular_price}</Text>
+              )}
+            </>
+          ) : (
+            <Text style={styles.noPriceText}>Price on request</Text>
           )}
         </View>
-        <View style={styles.ratingRow}>
-          <Ionicons name="star" size={12} color={Colors.warning} />
-          <Text style={styles.rating}>{product.average_rating}</Text>
-          <Text style={styles.ratingCount}>({product.rating_count})</Text>
-        </View>
-        <TouchableOpacity
-          testID={`add-to-cart-btn-${product.id}`}
-          style={styles.addBtn}
-          onPress={() => addToCart(product)}
-        >
-          <Ionicons name="add" size={18} color={Colors.textInverse} />
-        </TouchableOpacity>
+        {parseFloat(product.average_rating) > 0 && (
+          <View style={styles.ratingRow}>
+            <Ionicons name="star" size={12} color={Colors.warning} />
+            <Text style={styles.rating}>{product.average_rating}</Text>
+            <Text style={styles.ratingCount}>({product.rating_count})</Text>
+          </View>
+        )}
+        {hasPrice && (
+          <TouchableOpacity
+            testID={`add-to-cart-btn-${product.id}`}
+            style={styles.addBtn}
+            onPress={() => addToCart(product)}
+          >
+            <Ionicons name="add" size={18} color={Colors.textInverse} />
+          </TouchableOpacity>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -78,6 +98,13 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+  },
+  placeholderImage: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.sectionAlt,
   },
   saleBadge: {
     position: 'absolute',
@@ -130,6 +157,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.textDisabled,
     textDecorationLine: 'line-through',
+  },
+  noPriceText: {
+    fontSize: 12,
+    color: Colors.textSecondary,
+    fontStyle: 'italic',
   },
   ratingRow: {
     flexDirection: 'row',
