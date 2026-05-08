@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   warningIcon: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#FEF2F2', alignItems: 'center', justifyContent: 'center', marginBottom: 20 },
   heading: { fontSize: 22, fontWeight: '700', color: Colors.textPrimary, marginBottom: 12 },
   body: { fontSize: 14, color: Colors.textSecondary, textAlign: 'center', lineHeight: 22, marginBottom: 24 },
-  infoBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, backgroundColor: Colors.sectionAlt, padding: 14, borderRadius: 10, marginBottom: 32 },
+  infoBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, backgroundColor: Colors.surface, padding: 14, borderRadius: 10, marginBottom: 32 },
   infoText: { flex: 1, fontSize: 12, color: Colors.textSecondary, lineHeight: 18 },
   deleteBtn: { backgroundColor: Colors.error, borderRadius: 14, paddingVertical: 16, paddingHorizontal: 32, width: '100%', alignItems: 'center', marginBottom: 12 },
   deleteBtnText: { color: Colors.textInverse, fontSize: 15, fontWeight: '700' },

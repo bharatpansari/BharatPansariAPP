@@ -46,5 +46,5 @@ const styles = StyleSheet.create({
   lastUpdated: { fontSize: 12, color: Colors.textDisabled, marginBottom: 20 },
   heading: { fontSize: 16, fontWeight: '700', color: Colors.textPrimary, marginTop: 20, marginBottom: 8 },
   body: { fontSize: 14, color: Colors.textSecondary, lineHeight: 22 },
-  placeholder: { fontSize: 13, color: Colors.textDisabled, fontStyle: 'italic', marginTop: 24, textAlign: 'center', padding: 16, backgroundColor: Colors.sectionAlt, borderRadius: 8 },
+  placeholder: { fontSize: 13, color: Colors.textDisabled, fontStyle: 'italic', marginTop: 24, textAlign: 'center', padding: 16, backgroundColor: Colors.surface, borderRadius: 8 },
 });

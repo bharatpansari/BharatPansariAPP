@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingVi
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../src/constants/colors';
+import { Colors, Radius, Spacing } from '../src/constants/colors';
 import { useAuthStore } from '../src/stores/useAuthStore';
 import { apiClient } from '../src/services/api';
 

@@ -1,105 +1,54 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
-import { Colors } from '../constants/colors';
+import React, { useState } from 'react';
+import { View, Text, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { Colors, Radius, Shadows, Spacing } from '../constants/colors';
 import { Banner } from '../models/types';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const BANNER_WIDTH = SCREEN_WIDTH - 32;
+const { width: SW } = Dimensions.get('window');
+const BANNER_W = SW - 32;
 
-interface HeroBannerProps {
-  banners: Banner[];
-}
+export default function HeroBanner({ banners }: { banners: Banner[] }) {
+  const [idx, setIdx] = useState(0);
+  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => setIdx(Math.round(e.nativeEvent.contentOffset.x / BANNER_W));
 
-export default function HeroBanner({ banners }: HeroBannerProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const index = Math.round(e.nativeEvent.contentOffset.x / BANNER_WIDTH);
-    setActiveIndex(index);
-  };
+  if (!banners || banners.length === 0) return null;
 
   return (
-    <View testID="hero-banner" style={styles.container}>
-      <ScrollView
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        decelerationRate="fast"
-        snapToInterval={BANNER_WIDTH + 12}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {banners.map((banner) => (
-          <View key={banner.id} style={styles.bannerCard}>
-            <Image source={{ uri: banner.image }} style={styles.bannerImage} resizeMode="cover" />
+    <View testID="hero-banner" style={styles.wrap}>
+      <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} onScroll={onScroll} scrollEventThrottle={16} decelerationRate="fast" snapToInterval={BANNER_W + 12} contentContainerStyle={styles.scroll}>
+        {banners.map((b) => (
+          <View key={b.id} style={styles.bannerCard}>
+            {b.image ? <Image source={{ uri: b.image }} style={styles.bannerImage} resizeMode="cover" /> : (
+              <View style={[styles.bannerImage, { backgroundColor: Colors.primaryDark }]} />
+            )}
             <View style={styles.overlay}>
-              <Text style={styles.title}>{banner.title}</Text>
-              <Text style={styles.subtitle}>{banner.subtitle}</Text>
+              <View style={styles.offerBadge}><Text style={styles.offerBadgeText}>Limited Time Offer</Text></View>
+              <Text style={styles.title}>{b.title}</Text>
+              <Text style={styles.subtitle}>{b.subtitle}</Text>
+              <TouchableOpacity style={styles.shopBtn}><Text style={styles.shopBtnText}>Shop Now</Text></TouchableOpacity>
             </View>
           </View>
         ))}
       </ScrollView>
       <View style={styles.dots}>
-        {banners.map((_, i) => (
-          <View key={i} style={[styles.dot, i === activeIndex && styles.dotActive]} />
-        ))}
+        {banners.map((_, i) => <View key={i} style={[styles.dot, i === idx && styles.dotActive]} />)}
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginVertical: 16,
-  },
-  scrollContent: {
-    paddingHorizontal: 16,
-    gap: 12,
-  },
-  bannerCard: {
-    width: BANNER_WIDTH,
-    height: 160,
-    borderRadius: 16,
-    overflow: 'hidden',
-    backgroundColor: Colors.sectionAlt,
-  },
-  bannerImage: {
-    width: '100%',
-    height: '100%',
-  },
-  overlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 16,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    marginBottom: 2,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.9)',
-  },
-  dots: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 12,
-    gap: 6,
-  },
-  dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: Colors.borderLight,
-  },
-  dotActive: {
-    backgroundColor: Colors.primary,
-    width: 18,
-  },
+  wrap: { marginVertical: Spacing.base },
+  scroll: { paddingHorizontal: 16, gap: 12 },
+  bannerCard: { width: BANNER_W, height: 180, borderRadius: Radius.xxl, overflow: 'hidden', backgroundColor: Colors.primaryDark },
+  bannerImage: { width: '100%', height: '100%', position: 'absolute' },
+  overlay: { flex: 1, padding: 20, justifyContent: 'center', backgroundColor: 'rgba(0,60,30,0.55)' },
+  offerBadge: { backgroundColor: Colors.accent, alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: Radius.sm, marginBottom: 8 },
+  offerBadgeText: { color: Colors.textInverse, fontSize: 10, fontWeight: '700' },
+  title: { fontSize: 24, fontWeight: '800', color: '#FFFFFF', marginBottom: 2 },
+  subtitle: { fontSize: 13, color: 'rgba(255,255,255,0.85)', marginBottom: 12 },
+  shopBtn: { backgroundColor: '#FFFFFF', alignSelf: 'flex-start', paddingHorizontal: 20, paddingVertical: 8, borderRadius: Radius.pill },
+  shopBtnText: { color: Colors.primaryDark, fontSize: 13, fontWeight: '700' },
+  dots: { flexDirection: 'row', justifyContent: 'center', marginTop: 10, gap: 6 },
+  dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.border },
+  dotActive: { backgroundColor: Colors.primary, width: 20 },
 });
