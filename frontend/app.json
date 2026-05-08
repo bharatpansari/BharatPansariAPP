@@ -1,13 +1,13 @@
 {
   "expo": {
     "name": "Bharat Pansari",
-    "slug": "bharat-pansari",
+    "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "bharatpansari",
+    "scheme": "frontend",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.bharatpansari.app"
