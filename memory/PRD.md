@@ -5,10 +5,12 @@ Production-ready mobile ecommerce app for Bharat Pansari - a natural, herbal, Ay
 
 ## Architecture
 - **Framework**: Expo SDK 54 + React Native + expo-router (file-based routing)
-- **State Management**: Zustand
+- **State Management**: Zustand (cart, wishlist, auth)
 - **Navigation**: Bottom tab navigation (6 tabs) + Stack navigation for detail screens
-- **Data Layer**: Mock API adapter (easily swappable with real WordPress REST API)
-- **Future API**: `https://bharatpansari.com/wp-json/bp-app/v1/`
+- **Data Layer**: Auto-routing API client (web → proxy, native → direct WordPress)
+- **Production API**: `https://bharatpansari.com/wp-json/bp-app/v1/`
+- **Preview proxy**: `/api/wp/*` → FastAPI → WordPress (CORS bypass for web)
+- **Design**: Google Stitch premium UI (emerald #10B981, orange #FF7A00)
 
 ## Screens Implemented
 | Screen | Route | Status |

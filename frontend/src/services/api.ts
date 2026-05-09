@@ -2,20 +2,21 @@ import { Config } from '../constants/config';
 import { ApiResponse, HomePageData, Product, Category } from '../models/types';
 import { mockHomeData, mockProducts, mockCategories } from '../constants/mockData';
 
+// ═══════════════════════════════════════════════════════════
+// Bharat Pansari — API Client
+// ═══════════════════════════════════════════════════════════
+//
+// Config.API_BASE_URL auto-resolves:
+//   Web preview → /api/wp (Emergent proxy, bypasses CORS)
+//   Native mobile → https://bharatpansari.com/wp-json/bp-app/v1 (direct)
+//
+// No secrets stored. All endpoints are public read-only.
+// Auth endpoints (login/register) are mock stubs for Phase 1.
+// ═══════════════════════════════════════════════════════════
+
 class ApiClient {
-  private directUrl: string;
-  private proxyUrl: string;
-  private useMock: boolean;
-
-  constructor() {
-    this.directUrl = Config.API_BASE_URL + Config.WP_API_NAMESPACE;
-    this.proxyUrl = Config.PROXY_BASE_URL + Config.PROXY_PREFIX;
-    this.useMock = Config.USE_MOCK;
-  }
-
   private get baseUrl(): string {
-    // Use proxy to bypass CORS (backend forwards to WordPress)
-    return this.proxyUrl;
+    return Config.API_BASE_URL;
   }
 
   private sanitizeProduct(p: any): Product {
@@ -78,10 +79,10 @@ class ApiClient {
     }
   }
 
+  // ── Public endpoints (real WordPress API) ──────────────
+
   async getHome(): Promise<ApiResponse<HomePageData>> {
-    if (this.useMock) {
-      return { success: true, data: mockHomeData, message: 'OK' };
-    }
+    if (Config.USE_MOCK) return { success: true, data: mockHomeData, message: 'OK' };
     const res = await this.apiFetch<any>('/home');
     if (res.success && res.data) {
       const d = res.data;
@@ -103,9 +104,7 @@ class ApiClient {
   }
 
   async getCategories(): Promise<ApiResponse<Category[]>> {
-    if (this.useMock) {
-      return { success: true, data: mockCategories, message: 'OK' };
-    }
+    if (Config.USE_MOCK) return { success: true, data: mockCategories, message: 'OK' };
     const res = await this.apiFetch<any>('/categories');
     if (res.success && Array.isArray(res.data)) {
       return { success: true, data: res.data.map((c: any) => this.sanitizeCategory(c)), message: 'OK' };
@@ -114,7 +113,7 @@ class ApiClient {
   }
 
   async getProducts(categorySlug?: string): Promise<ApiResponse<Product[]>> {
-    if (this.useMock) {
+    if (Config.USE_MOCK) {
       if (categorySlug) {
         const filtered = mockProducts.filter(p => p.category_slugs.includes(categorySlug));
         return { success: true, data: filtered, message: 'OK' };
@@ -132,7 +131,7 @@ class ApiClient {
   }
 
   async getProduct(id: number): Promise<ApiResponse<Product>> {
-    if (this.useMock) {
+    if (Config.USE_MOCK) {
       const product = mockProducts.find(p => p.id === id);
       if (product) return { success: true, data: product, message: 'OK' };
       return { success: false, error: { code: 'not_found', message: 'Product not found' } };
@@ -145,7 +144,7 @@ class ApiClient {
   }
 
   async searchProducts(query: string): Promise<ApiResponse<Product[]>> {
-    if (this.useMock) {
+    if (Config.USE_MOCK) {
       const q = query.toLowerCase();
       const results = mockProducts.filter(
         p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q)
@@ -159,7 +158,9 @@ class ApiClient {
     return res as ApiResponse<Product[]>;
   }
 
-  // Auth - still mock for Phase 1A
+  // ── Auth stubs (mock for Phase 1) ─────────────────────
+  // TODO: Replace with real WordPress JWT auth endpoints
+
   async login(email: string, password: string): Promise<ApiResponse<{ token: string }>> {
     if (email && password) {
       return { success: true, data: { token: 'mock_token_123' }, message: 'Login successful (mock)' };
