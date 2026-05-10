@@ -106,3 +106,8 @@ credentials.json
 *.pem
 *.key
 .credentials
+
+# Expo / Metro cache
+frontend/.metro-cache/
+frontend/.expo/
+
