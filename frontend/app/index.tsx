@@ -1,12 +1,28 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors, Spacing } from '../src/constants/colors';
 import { Config } from '../src/constants/config';
 
+const ONBOARDING_KEY = 'bharat-pansari-onboarding-complete';
+
 export default function SplashScreen() {
   const router = useRouter();
-  useEffect(() => { const t = setTimeout(() => router.replace('/onboarding'), 2200); return () => clearTimeout(t); }, []);
+  useEffect(() => {
+    let cancelled = false;
+    const decide = async () => {
+      let done = false;
+      try {
+        const val = await AsyncStorage.getItem(ONBOARDING_KEY);
+        done = val === 'true';
+      } catch { /* default to showing onboarding */ }
+      await new Promise(r => setTimeout(r, 2000));
+      if (!cancelled) router.replace(done ? '/(tabs)' : '/onboarding');
+    };
+    decide();
+    return () => { cancelled = true; };
+  }, []);
 
   return (
     <View style={styles.container} testID="splash-screen">

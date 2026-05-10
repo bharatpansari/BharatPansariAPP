@@ -1,8 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Radius, Spacing } from '../src/constants/colors';
+
+const ONBOARDING_KEY = 'bharat-pansari-onboarding-complete';
 
 const { width: SW } = Dimensions.get('window');
 const slides = [
@@ -16,14 +19,18 @@ export default function OnboardingScreen() {
   const [active, setActive] = useState(0);
   const ref = useRef<ScrollView>(null);
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => setActive(Math.round(e.nativeEvent.contentOffset.x / SW));
+  const finish = async () => {
+    try { await AsyncStorage.setItem(ONBOARDING_KEY, 'true'); } catch { /* allow continue */ }
+    router.replace('/(tabs)');
+  };
   const next = () => {
     if (active < slides.length - 1) ref.current?.scrollTo({ x: (active + 1) * SW, animated: true });
-    else router.replace('/(tabs)');
+    else finish();
   };
 
   return (
     <View style={styles.container} testID="onboarding-screen">
-      <TouchableOpacity testID="skip-btn" style={styles.skipBtn} onPress={() => router.replace('/(tabs)')}>
+      <TouchableOpacity testID="skip-btn" style={styles.skipBtn} onPress={finish}>
         <Text style={styles.skipText}>Skip</Text>
       </TouchableOpacity>
       <View style={{ flex: 1 }}>
