@@ -69,10 +69,10 @@ export default function CategoryCard({ category, onPress, variant = 'grid' }: Ca
 }
 
 const styles = StyleSheet.create({
-  circleItem: { alignItems: 'center', width: 72, marginRight: Spacing.base },
-  circleIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: Colors.primaryLight, alignItems: 'center', justifyContent: 'center', overflow: 'hidden', marginBottom: 6 },
+  circleItem: { alignItems: 'center', width: 76, marginRight: 14 },
+  circleIcon: { width: 54, height: 54, borderRadius: 27, backgroundColor: Colors.primaryLight, alignItems: 'center', justifyContent: 'center', overflow: 'hidden', marginBottom: 6 },
   circleImage: { width: '100%', height: '100%' },
-  circleLabel: { fontSize: 11, fontWeight: '500', color: Colors.textSecondary, textAlign: 'center' },
+  circleLabel: { fontSize: 10, fontWeight: '500', color: Colors.textSecondary, textAlign: 'center', width: '100%' },
   chip: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.card, borderRadius: Radius.pill, paddingVertical: 8, paddingHorizontal: 14, marginRight: 10, ...Shadows.sm },
   chipImage: { width: 24, height: 24, borderRadius: 12, marginRight: 8 },
   chipPlaceholder: { backgroundColor: Colors.primaryLight, alignItems: 'center', justifyContent: 'center' },

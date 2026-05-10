@@ -32,7 +32,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -109,27 +109,29 @@ export default function HomeScreen() {
         <View style={styles.disclaimer}>
           <Text style={styles.disclaimerText}>Information is for general wellness and educational purposes only. It is not medical advice. Please consult a qualified professional before use.</Text>
         </View>
-        <View style={{ height: 20 }} />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
+const SCREEN_PAD = 20;
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.base, paddingVertical: Spacing.md },
+  scrollContent: { paddingBottom: 16 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: SCREEN_PAD, paddingVertical: Spacing.md },
   headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   locationIcon: { width: 28, height: 28, borderRadius: 14, backgroundColor: Colors.primaryLight, alignItems: 'center', justifyContent: 'center' },
   brandName: { fontSize: 22, fontWeight: '800', color: Colors.primaryDark },
   profileBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: Colors.card, alignItems: 'center', justifyContent: 'center', ...Shadows.sm },
-  searchBar: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.card, marginHorizontal: Spacing.base, borderRadius: Radius.pill, paddingHorizontal: Spacing.base, paddingVertical: 12, gap: 10, ...Shadows.sm },
+  searchBar: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.card, marginHorizontal: SCREEN_PAD, borderRadius: Radius.pill, paddingHorizontal: Spacing.base, paddingVertical: 12, gap: 10, ...Shadows.sm },
   searchPlaceholder: { flex: 1, fontSize: 14, color: Colors.textDisabled },
   section: { marginTop: Spacing.xl },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.base, marginBottom: Spacing.md },
-  sectionTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary },
+  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: SCREEN_PAD, marginBottom: Spacing.md },
+  sectionTitle: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary },
   viewAll: { fontSize: 13, color: Colors.primary, fontWeight: '600' },
-  categoryScroll: { paddingHorizontal: Spacing.base },
-  productGrid: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 10 },
-  disclaimer: { marginHorizontal: Spacing.base, marginTop: Spacing.xl, padding: Spacing.base, backgroundColor: Colors.primarySurface, borderRadius: Radius.lg },
+  categoryScroll: { paddingLeft: SCREEN_PAD, paddingRight: 30 },
+  productGrid: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: SCREEN_PAD, gap: 12 },
+  disclaimer: { marginHorizontal: SCREEN_PAD, marginTop: Spacing.xl, padding: Spacing.base, backgroundColor: Colors.primarySurface, borderRadius: Radius.lg },
   disclaimerText: { fontSize: 11, color: Colors.textMuted, lineHeight: 16, textAlign: 'center' },
 });

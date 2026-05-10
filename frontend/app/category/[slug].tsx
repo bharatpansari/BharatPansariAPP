@@ -42,6 +42,7 @@ export default function CategoryProductsScreen() {
       </View>
       {loading ? <LoadingState /> : products.length === 0 ? <EmptyState icon="cube-outline" title="No products" message="No products found in this category" /> : (
         <FlatList data={products} numColumns={2} keyExtractor={i => i.id.toString()} contentContainerStyle={styles.grid}
+          columnWrapperStyle={styles.gridRow}
           renderItem={({ item }) => <ProductCard product={item} onPress={() => router.push(`/product/${item.id}`)} />} />
       )}
     </SafeAreaView>
@@ -57,5 +58,6 @@ const styles = StyleSheet.create({
   headerCount: { fontSize: 12, color: Colors.textMuted },
   headerActions: { flexDirection: 'row', gap: 8 },
   actionBtn: { width: 36, height: 36, borderRadius: Radius.md, backgroundColor: Colors.card, alignItems: 'center', justifyContent: 'center', ...Shadows.sm },
-  grid: { paddingHorizontal: 10, paddingBottom: 20 },
+  grid: { paddingHorizontal: 20, paddingBottom: 20 },
+  gridRow: { justifyContent: 'space-between' as const, marginBottom: 12 },
 });

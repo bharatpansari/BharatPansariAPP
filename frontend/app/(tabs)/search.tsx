@@ -53,6 +53,7 @@ export default function SearchScreen() {
       {searched && !loading && results.length === 0 && <EmptyState icon="search-outline" title="No results found" message={`We couldn't find products matching "${q}"`} />}
       {results.length > 0 && (
         <FlatList data={results} numColumns={2} keyExtractor={i => i.id.toString()} contentContainerStyle={styles.grid}
+          columnWrapperStyle={styles.gridRow}
           renderItem={({ item }) => <ProductCard product={item} onPress={() => router.push(`/product/${item.id}`)} />} />
       )}
     </SafeAreaView>
@@ -69,5 +70,6 @@ const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: { backgroundColor: Colors.primaryLight, paddingHorizontal: 16, paddingVertical: 8, borderRadius: Radius.pill },
   chipText: { fontSize: 13, color: Colors.primaryDark, fontWeight: '500' },
-  grid: { paddingHorizontal: 10, paddingBottom: 20 },
+  grid: { paddingHorizontal: 20, paddingBottom: 20 },
+  gridRow: { justifyContent: 'space-between' as const, marginBottom: 12 },
 });

@@ -1,10 +1,13 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Shadows } from '../../src/constants/colors';
 import { useCartStore } from '../../src/stores/useCartStore';
 import { useWishlistStore } from '../../src/stores/useWishlistStore';
+
+const TAB_BASE_HEIGHT = 58;
 
 function Badge({ count }: { count: number }) {
   if (count <= 0) return null;
@@ -14,6 +17,7 @@ function Badge({ count }: { count: number }) {
 export default function TabLayout() {
   const cartCount = useCartStore(s => s.getItemCount());
   const wishlistCount = useWishlistStore(s => s.items.length);
+  const { bottom } = useSafeAreaInsets();
 
   return (
     <Tabs screenOptions={{
@@ -23,9 +27,9 @@ export default function TabLayout() {
       tabBarStyle: {
         backgroundColor: Colors.card,
         borderTopWidth: 0,
-        height: Platform.OS === 'ios' ? 88 : 68,
-        paddingBottom: Platform.OS === 'ios' ? 24 : 8,
-        paddingTop: 10,
+        height: TAB_BASE_HEIGHT + bottom,
+        paddingBottom: bottom,
+        paddingTop: 8,
         ...Shadows.md,
       },
       tabBarLabelStyle: { fontSize: 10, fontWeight: '500', marginTop: 2 },
