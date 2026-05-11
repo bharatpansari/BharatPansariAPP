@@ -6,6 +6,7 @@ import { Config } from '../constants/config';
 import { Product } from '../models/types';
 import { useCartStore } from '../stores/useCartStore';
 import { useWishlistStore } from '../stores/useWishlistStore';
+import { useToastStore } from '../stores/useToastStore';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_W - 40 - 12) / 2; // 20px padding each side + 12px gap
@@ -19,6 +20,8 @@ interface ProductCardProps {
 export default function ProductCard({ product, onPress, variant = 'grid' }: ProductCardProps) {
   const addToCart = useCartStore(s => s.addToCart);
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlistStore();
+  const showToast = useToastStore(s => s.show);
+  const handleAdd = () => { addToCart(product); showToast('Added to cart'); };
   const inWishlist = isInWishlist(product.id);
   const hasPrice = product.price !== '' && product.price !== '0';
   const hasDiscount = hasPrice && product.sale_price && product.sale_price !== '' && product.sale_price !== product.regular_price;
@@ -47,7 +50,7 @@ export default function ProductCard({ product, onPress, variant = 'grid' }: Prod
           ) : <Text style={styles.noPrice}>Price on request</Text>}
         </View>
         {hasPrice && (
-          <TouchableOpacity testID={`add-to-cart-btn-${product.id}`} style={styles.addBtnOrange} onPress={() => addToCart(product)}>
+          <TouchableOpacity testID={`add-to-cart-btn-${product.id}`} style={styles.addBtnOrange} onPress={handleAdd}>
             <Ionicons name="add" size={20} color={Colors.textInverse} />
           </TouchableOpacity>
         )}
@@ -92,7 +95,7 @@ export default function ProductCard({ product, onPress, variant = 'grid' }: Prod
             ) : <Text style={styles.noPrice}>Price on request</Text>}
           </View>
           {hasPrice && (
-            <TouchableOpacity testID={`add-to-cart-btn-${product.id}`} style={styles.addBtnOrange} onPress={() => addToCart(product)}>
+            <TouchableOpacity testID={`add-to-cart-btn-${product.id}`} style={styles.addBtnOrange} onPress={handleAdd}>
               <Ionicons name="add" size={16} color={Colors.textInverse} />
             </TouchableOpacity>
           )}

@@ -9,6 +9,7 @@ import { Product } from '../../src/models/types';
 import { apiClient } from '../../src/services/api';
 import { useCartStore } from '../../src/stores/useCartStore';
 import { useWishlistStore } from '../../src/stores/useWishlistStore';
+import { useToastStore } from '../../src/stores/useToastStore';
 import { LoadingState } from '../../src/components/States';
 
 const { width: SW } = Dimensions.get('window');
@@ -22,6 +23,7 @@ export default function ProductDetailScreen() {
   const [imgIdx, setImgIdx] = useState(0);
   const addToCart = useCartStore(s => s.addToCart);
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlistStore();
+  const showToast = useToastStore(s => s.show);
 
   useEffect(() => { load(); }, [id]);
   const load = async () => { if (!id) return; const r = await apiClient.getProduct(parseInt(id)); if (r.success && r.data) setProduct(r.data); setLoading(false); };
@@ -120,7 +122,7 @@ export default function ProductDetailScreen() {
           <Ionicons name={inWL ? 'heart' : 'heart-outline'} size={22} color={inWL ? Colors.error : Colors.textMuted} />
         </TouchableOpacity>
         {hasPrice ? (
-          <TouchableOpacity testID="add-to-cart-detail-btn" style={styles.addCartBtn} onPress={() => addToCart(product, qty)}>
+          <TouchableOpacity testID="add-to-cart-detail-btn" style={styles.addCartBtn} onPress={() => { addToCart(product, qty); showToast('Added to cart'); }}>
             <Ionicons name="bag-add" size={20} color={Colors.textInverse} /><Text style={styles.addCartText}>Add to Cart</Text>
           </TouchableOpacity>
         ) : <View style={[styles.addCartBtn, { backgroundColor: Colors.textDisabled }]}><Text style={styles.addCartText}>Price Not Available</Text></View>}

@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import AppToast from '../src/components/AppToast';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,6 +43,7 @@ export default function RootLayout() {
         <Stack.Screen name="terms" />
         <Stack.Screen name="delete-account" />
       </Stack>
+      <AppToast />
     </View>
   );
 }
