@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Spacing } from '../../src/constants/colors';
@@ -12,6 +12,7 @@ export default function CategoriesScreen() {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => { load(); }, []);
@@ -22,6 +23,12 @@ export default function CategoriesScreen() {
     else setError(r.error?.message || 'Failed');
     setLoading(false);
   };
+  const onRefresh = async () => {
+    setRefreshing(true);
+    const r = await apiClient.getCategories();
+    if (r.success && r.data) { setCategories(r.data); setError(''); }
+    setRefreshing(false);
+  };
 
   if (loading) return <SafeAreaView style={styles.container} edges={['top']}><LoadingState /></SafeAreaView>;
   if (error) return <SafeAreaView style={styles.container} edges={['top']}><ErrorState message={error} /></SafeAreaView>;
@@ -30,6 +37,7 @@ export default function CategoriesScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}><Text style={styles.title}>Categories</Text><Text style={styles.sub}>Browse all product categories</Text></View>
       <FlatList data={categories} numColumns={2} keyExtractor={(i) => i.id.toString()} contentContainerStyle={styles.grid}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} colors={[Colors.primary]} />}
         renderItem={({ item }) => <CategoryCard category={item} variant="grid" onPress={() => router.push(`/category/${item.slug}`)} />} />
     </SafeAreaView>
   );

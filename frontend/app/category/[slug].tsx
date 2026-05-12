@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,6 +14,7 @@ export default function CategoryProductsScreen() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [categoryName, setCategoryName] = useState('');
 
   useEffect(() => { load(); }, [slug]);
@@ -23,6 +24,13 @@ export default function CategoryProductsScreen() {
     const r = await apiClient.getProducts(slug);
     if (r.success && r.data) setProducts(r.data);
     setLoading(false);
+  };
+  const onRefresh = async () => {
+    if (!slug) return;
+    setRefreshing(true);
+    const r = await apiClient.getProducts(slug);
+    if (r.success && r.data) setProducts(r.data);
+    setRefreshing(false);
   };
 
   return (
@@ -43,6 +51,7 @@ export default function CategoryProductsScreen() {
       {loading ? <LoadingState /> : products.length === 0 ? <EmptyState icon="cube-outline" title="No products" message="No products found in this category" /> : (
         <FlatList data={products} numColumns={2} keyExtractor={i => i.id.toString()} contentContainerStyle={styles.grid}
           columnWrapperStyle={styles.gridRow}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} colors={[Colors.primary]} />}
           renderItem={({ item }) => <ProductCard product={item} onPress={() => router.push(`/product/${item.id}`)} />} />
       )}
     </SafeAreaView>

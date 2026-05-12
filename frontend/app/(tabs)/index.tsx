@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +16,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const [homeData, setHomeData] = useState<HomePageData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => { loadData(); }, []);
@@ -26,13 +27,20 @@ export default function HomeScreen() {
     else setError(r.error?.message || 'Failed to load');
     setLoading(false);
   };
+  const onRefresh = async () => {
+    setRefreshing(true);
+    const r = await apiClient.getHome();
+    if (r.success && r.data) { setHomeData(r.data); setError(''); }
+    setRefreshing(false);
+  };
 
   if (loading) return <SafeAreaView style={styles.container} edges={['top']}><LoadingState /></SafeAreaView>;
   if (error || !homeData) return <SafeAreaView style={styles.container} edges={['top']}><ErrorState message={error || 'Failed to load'} /></SafeAreaView>;
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} colors={[Colors.primary]} />}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>

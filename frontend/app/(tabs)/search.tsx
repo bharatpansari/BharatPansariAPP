@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +16,7 @@ export default function SearchScreen() {
   const [q, setQ] = useState('');
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [searched, setSearched] = useState(false);
 
   const search = async (term?: string) => {
@@ -54,6 +55,13 @@ export default function SearchScreen() {
       {results.length > 0 && (
         <FlatList data={results} numColumns={2} keyExtractor={i => i.id.toString()} contentContainerStyle={styles.grid}
           columnWrapperStyle={styles.gridRow}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={async () => {
+            if (!q.trim()) return;
+            setRefreshing(true);
+            const r = await apiClient.searchProducts(q.trim());
+            if (r.success && r.data) setResults(r.data);
+            setRefreshing(false);
+          }} tintColor={Colors.primary} colors={[Colors.primary]} />}
           renderItem={({ item }) => <ProductCard product={item} onPress={() => router.push(`/product/${item.id}`)} />} />
       )}
     </SafeAreaView>
