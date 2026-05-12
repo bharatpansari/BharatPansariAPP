@@ -103,9 +103,10 @@ class ApiClient {
     return res as ApiResponse<HomePageData>;
   }
 
-  async getCategories(): Promise<ApiResponse<Category[]>> {
+  async getCategories(options?: { hideEmpty?: boolean }): Promise<ApiResponse<Category[]>> {
     if (Config.USE_MOCK) return { success: true, data: mockCategories, message: 'OK' };
-    const res = await this.apiFetch<any>('/categories');
+    const endpoint = options?.hideEmpty === false ? '/categories?hide_empty=false' : '/categories';
+    const res = await this.apiFetch<any>(endpoint);
     if (res.success && Array.isArray(res.data)) {
       return { success: true, data: res.data.map((c: any) => this.sanitizeCategory(c)), message: 'OK' };
     }

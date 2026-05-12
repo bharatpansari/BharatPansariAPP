@@ -18,14 +18,14 @@ export default function CategoriesScreen() {
   useEffect(() => { load(); }, []);
   const load = async () => {
     setLoading(true);
-    const r = await apiClient.getCategories();
+    const r = await apiClient.getCategories({ hideEmpty: false });
     if (r.success && r.data) setCategories(r.data);
     else setError(r.error?.message || 'Failed');
     setLoading(false);
   };
   const onRefresh = async () => {
     setRefreshing(true);
-    const r = await apiClient.getCategories();
+    const r = await apiClient.getCategories({ hideEmpty: false });
     if (r.success && r.data) { setCategories(r.data); setError(''); }
     setRefreshing(false);
   };
