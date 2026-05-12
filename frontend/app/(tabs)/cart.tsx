@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Radius, Shadows, Spacing } from '../../src/constants/colors';
 import { Config } from '../../src/constants/config';
@@ -10,20 +11,32 @@ import { EmptyState } from '../../src/components/States';
 export default function CartScreen() {
   const { items, updateQuantity, removeFromCart, getTotal, clearCart } = useCartStore();
   const total = getTotal();
+  const router = useRouter();
+  const { bottom } = useSafeAreaInsets();
+  const goBack = () => { if (router.canGoBack()) router.back(); else router.replace('/(tabs)'); };
+
+  const Header = ({ showClear }: { showClear: boolean }) => (
+    <View style={styles.header}>
+      <TouchableOpacity testID="cart-back-btn" style={styles.backBtn} onPress={goBack}>
+        <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
+      </TouchableOpacity>
+      <Text style={styles.title}>Cart</Text>
+      {showClear ? (
+        <TouchableOpacity testID="clear-cart-btn" onPress={clearCart}><Text style={styles.clearText}>Clear All</Text></TouchableOpacity>
+      ) : <View style={styles.backBtn} />}
+    </View>
+  );
 
   if (items.length === 0) return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}><Text style={styles.title}>Cart</Text></View>
+      <Header showClear={false} />
       <EmptyState icon="bag-outline" title="Your cart is empty" message="Add products to your cart to see them here" />
     </SafeAreaView>
   );
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Cart</Text>
-        <TouchableOpacity testID="clear-cart-btn" onPress={clearCart}><Text style={styles.clearText}>Clear All</Text></TouchableOpacity>
-      </View>
+      <Header showClear={true} />
       <FlatList data={items} keyExtractor={i => i.product_id.toString()} contentContainerStyle={styles.list}
         renderItem={({ item }) => {
           const img = item.product.images?.[0]?.src;
@@ -72,7 +85,7 @@ export default function CartScreen() {
         )}
       />
       {/* Bottom bar */}
-      <View style={styles.bottomBar}>
+      <View style={[styles.bottomBar, { paddingBottom: Math.max(bottom, 12) + 8 }]}>
         <View><Text style={styles.btLabel}>Total</Text><Text style={styles.btTotal}>{Config.CURRENCY_SYMBOL}{total.toFixed(0)}</Text></View>
         <TouchableOpacity testID="checkout-btn" style={styles.checkoutBtn}>
           <Text style={styles.checkoutText}>Proceed to Checkout</Text>
@@ -85,9 +98,10 @@ export default function CartScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.base, paddingVertical: Spacing.base },
-  title: { fontSize: 26, fontWeight: '800', color: Colors.primary },
-  clearText: { fontSize: 13, color: Colors.error, fontWeight: '500' },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.base, paddingVertical: Spacing.md, gap: 12 },
+  backBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: Colors.card, alignItems: 'center', justifyContent: 'center', ...Shadows.sm },
+  title: { flex: 1, textAlign: 'center', fontSize: 20, fontWeight: '800', color: Colors.textPrimary },
+  clearText: { fontSize: 13, color: Colors.error, fontWeight: '600' },
   list: { paddingHorizontal: Spacing.base, gap: 12, paddingBottom: 12 },
   card: { flexDirection: 'row', backgroundColor: Colors.card, borderRadius: Radius.xl, padding: Spacing.md, ...Shadows.sm },
   image: { width: 72, height: 72, borderRadius: Radius.lg, backgroundColor: Colors.surface },
@@ -115,7 +129,7 @@ const styles = StyleSheet.create({
   rowFree: { fontSize: 14, fontWeight: '600', color: Colors.primary },
   totalLabel: { fontSize: 16, fontWeight: '700', color: Colors.textPrimary },
   totalValue: { fontSize: 18, fontWeight: '800', color: Colors.primary },
-  bottomBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: Colors.card, padding: Spacing.base, paddingBottom: 28, borderTopWidth: 1, borderTopColor: Colors.borderLight },
+  bottomBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: Colors.card, paddingHorizontal: Spacing.base, paddingTop: Spacing.md, borderTopWidth: 1, borderTopColor: Colors.borderLight },
   btLabel: { fontSize: 12, color: Colors.textMuted },
   btTotal: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary },
   checkoutBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.primary, borderRadius: Radius.pill, paddingHorizontal: 24, paddingVertical: 14, gap: 8 },

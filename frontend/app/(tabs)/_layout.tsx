@@ -40,7 +40,7 @@ export default function TabLayout() {
       <Tabs.Screen name="wishlist" options={{ title: 'Wishlist', tabBarIcon: ({ color }) => (
         <View><Ionicons name="heart" size={22} color={color} /><Badge count={wishlistCount} /></View>
       )}} />
-      <Tabs.Screen name="cart" options={{ title: 'Cart', tabBarIcon: ({ color }) => (
+      <Tabs.Screen name="cart" options={{ title: 'Cart', tabBarStyle: { display: 'none' }, tabBarIcon: ({ color }) => (
         <View><Ionicons name="bag" size={22} color={color} /><Badge count={cartCount} /></View>
       )}} />
       <Tabs.Screen name="account" options={{ title: 'Account', tabBarIcon: ({ color }) => <Ionicons name="person" size={22} color={color} /> }} />
