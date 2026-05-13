@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Radius, Shadows, Spacing } from '../../src/constants/colors';
 import { Config } from '../../src/constants/config';
@@ -24,6 +24,8 @@ export default function ProductDetailScreen() {
   const addToCart = useCartStore(s => s.addToCart);
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlistStore();
   const showToast = useToastStore(s => s.show);
+  const { bottom: bottomInset } = useSafeAreaInsets();
+  const barPaddingBottom = Math.max(bottomInset, 12);
 
   useEffect(() => { load(); }, [id]);
   const load = async () => { if (!id) return; const r = await apiClient.getProduct(parseInt(id)); if (r.success && r.data) setProduct(r.data); setLoading(false); };
@@ -113,10 +115,10 @@ export default function ProductDetailScreen() {
           <Ionicons name="information-circle-outline" size={16} color={Colors.textMuted} />
           <Text style={styles.disclaimerText}>Information is for general wellness and educational purposes only. It is not medical advice.</Text>
         </View>
-        <View style={{ height: 100 }} />
+        <View style={{ height: 76 + barPaddingBottom + 24 }} />
       </ScrollView>
       {/* Bottom Bar */}
-      <View style={styles.bottomBar}>
+      <View style={[styles.bottomBar, { paddingBottom: barPaddingBottom }]}>
         <TouchableOpacity testID="wishlist-detail-btn" style={[styles.wlBtn, inWL && styles.wlActive]}
           onPress={() => inWL ? removeFromWishlist(product.id) : addToWishlist(product)}>
           <Ionicons name={inWL ? 'heart' : 'heart-outline'} size={22} color={inWL ? Colors.error : Colors.textMuted} />
@@ -167,7 +169,7 @@ const styles = StyleSheet.create({
   attrVal: { fontSize: 13, fontWeight: '500', color: Colors.textPrimary },
   disclaimerBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginHorizontal: Spacing.base, padding: Spacing.md, backgroundColor: Colors.primarySurface, borderRadius: Radius.lg },
   disclaimerText: { flex: 1, fontSize: 11, color: Colors.textMuted, lineHeight: 16 },
-  bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', padding: Spacing.base, paddingBottom: 28, backgroundColor: Colors.card, borderTopWidth: 1, borderTopColor: Colors.borderLight, gap: 12 },
+  bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', paddingHorizontal: Spacing.base, paddingTop: Spacing.base, backgroundColor: Colors.card, borderTopWidth: 1, borderTopColor: Colors.borderLight, gap: 12 },
   wlBtn: { width: 52, height: 52, borderRadius: Radius.lg, borderWidth: 1, borderColor: Colors.border, alignItems: 'center', justifyContent: 'center' },
   wlActive: { borderColor: Colors.errorLight, backgroundColor: Colors.errorLight },
   addCartBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.primaryDark, borderRadius: Radius.pill, gap: 8, height: 52 },
