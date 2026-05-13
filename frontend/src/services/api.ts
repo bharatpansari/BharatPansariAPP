@@ -113,7 +113,7 @@ class ApiClient {
     return res as ApiResponse<Category[]>;
   }
 
-  async getProducts(categorySlug?: string): Promise<ApiResponse<Product[]>> {
+  async getProducts(categorySlug?: string, options?: { orderby?: string; order?: 'asc' | 'desc' }): Promise<ApiResponse<Product[]>> {
     if (Config.USE_MOCK) {
       if (categorySlug) {
         const filtered = mockProducts.filter(p => p.category_slugs.includes(categorySlug));
@@ -121,9 +121,13 @@ class ApiClient {
       }
       return { success: true, data: mockProducts, message: 'OK' };
     }
-    const endpoint = categorySlug
-      ? `/products?category=${encodeURIComponent(categorySlug)}&page=1&per_page=50`
-      : '/products?page=1&per_page=50';
+    const params = new URLSearchParams();
+    if (categorySlug) params.set('category', categorySlug);
+    params.set('page', '1');
+    params.set('per_page', '50');
+    if (options?.orderby) params.set('orderby', options.orderby);
+    if (options?.order) params.set('order', options.order);
+    const endpoint = `/products?${params.toString()}`;
     const res = await this.apiFetch<any>(endpoint);
     if (res.success && Array.isArray(res.data)) {
       return { success: true, data: res.data.map((p: any) => this.sanitizeProduct(p)), message: 'OK' };
